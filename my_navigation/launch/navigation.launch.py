@@ -73,18 +73,19 @@ def generate_launch_description():
             arguments=['0','0','0','0','0','0','map','odom'],
             output='screen'
         ),
-    
-
-
+        
 		IncludeLaunchDescription(
 			PythonLaunchDescriptionSource([tetra_description_prefix,'/launch','/tetra_description.launch.py']),
 			launch_arguments={'use_rviz': 'false'}.items()
 		),
+  
 		IncludeLaunchDescription(
 			PythonLaunchDescriptionSource([tetra_prefix,'/launch','/tetra_configuration.launch.py']),
 		),
+  
 		IncludeLaunchDescription(
 			PythonLaunchDescriptionSource([rs_prefix, '/examples/pointcloud','/rs_d455_pointcloud_launch.py']),
 			# launch_arguments={'use_rviz': 'false'}.items()
     	)
+  
     ])
