@@ -1,4 +1,4 @@
-# NUVI: Congestion-aware Autonomous Mobility for Airports
+# NUVI: Congestion-aware Autonomous Mobility
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
@@ -6,8 +6,10 @@
 
 ## Overview
 
-NUVI is an autonomous mobility system designed for airport environments, supporting congestion-aware path planning, ETA prediction, and intuitive visual feedback using projection UI.  
+NUVI is an autonomous mobility system designed for indoor environments, supporting congestion-aware path planning, ETA prediction, and intuitive visual feedback using projection UI.  
 The system leverages real-time crowd density data to optimize navigation and enhance user experience for all passengers.
+
+![image](https://github.com/user-attachments/assets/2ceffc59-77ea-41dd-8694-a294692b18d8)
 
 ---
 
@@ -30,6 +32,7 @@ The system leverages real-time crowd density data to optimize navigation and enh
 - [Intel RealSense SDK](https://github.com/IntelRealSense/librealsense)
 - Python 3.8+
 - (Optional) MQTT broker
+- Navigation2, STVL plugin
 
 ### Installation
 
