@@ -8,6 +8,7 @@
 
 NUVI is an autonomous mobility system designed for indoor environments, supporting congestion-aware path planning, ETA prediction, and intuitive visual feedback using projection UI.  
 The system leverages real-time crowd density data to optimize navigation and enhance user experience for all passengers.
+
 ![image](https://github.com/user-attachments/assets/6d1ce648-9e46-45d8-a843-7d0aa3166728)
 
 ---
