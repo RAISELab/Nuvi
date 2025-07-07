@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>혼잡도 및 방향 시각화</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+    .arrows {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 50px;
+      font-size: 80px;
+    }
+    .arrow-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 5px solid transparent;
+      border-radius: 16px;
+      padding: 10px;
+    }
+    .arrow {
+      color: gray;
+    }
+    .density-value {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+    .highlight {
+      border-color: blue;
+    }
+  </style>
+</head>
+<body>
+  <h2>실시간 로봇 경로 혼잡도 및 방향</h2>
+
+  <div class="arrows">
+    <div id="left-block" class="arrow-block">
+      <div id="left" class="arrow">←</div>
+      <div id="left-value" class="density-value">-</div>
+    </div>
+    <div id="forward-block" class="arrow-block">
+      <div id="forward" class="arrow">↑</div>
+      <div id="forward-value" class="density-value">-</div>
+    </div>
+    <div id="right-block" class="arrow-block">
+      <div id="right" class="arrow">→</div>
+      <div id="right-value" class="density-value">-</div>
+    </div>
+  </div>
+
+  <script>
+    const client = mqtt.connect('wss://test.mosquitto.org:8081/mqtt');
+
+    function getColorByDensity(density) {
+      if (density < 40) return 'green';
+      else if (density < 70) return 'orange';
+      else return 'red';
+    }
+
+    function clearHighlights() {
+      ['left-block', 'forward-block', 'right-block'].forEach(id => {
+        document.getElementById(id).classList.remove('highlight');
+      });
+    }
+
+    client.on('connect', () => {
+      console.log('✅ MQTT WebSocket connected');
+      client.subscribe('congestion_info'); // 혼잡도 Vector3
+      client.subscribe('direction');       // 방향 Int64
+    });
+
+    client.on('message', (topic, message) => {
+      const cleanedTopic = topic.trim();
+
+      if (cleanedTopic === 'congestion_info') {
+        try {
+          const payload = JSON.parse(message.toString());
+          console.log('📨 혼잡도 수신:', payload);
+
+          const densities = {
+            left: payload.y,
+            forward: payload.x,
+            right: payload.z
+          };
+
+          Object.entries(densities).forEach(([dir, value]) => {
+            const el = document.getElementById(dir);
+            const valEl = document.getElementById(`${dir}-value`);
+            if (el && valEl) {
+              el.style.color = getColorByDensity(value);
+              valEl.textContent = `${value.toFixed(1)}%`;
+            }
+          });
+        } catch (e) {
+          console.warn('❗ 혼잡도 JSON 파싱 실패:', e);
+        }
+
+      } else if (cleanedTopic === 'direction') {
+        const value = parseInt(message.toString());
+        console.log('📨 방향 수신:', value);
+        clearHighlights();
+
+        if (value === 0) {
+          document.getElementById('forward-block').classList.add('highlight');
+        } else if (value === 1) {
+          document.getElementById('left-block').classList.add('highlight');
+        } else if (value === -1) {
+          document.getElementById('right-block').classList.add('highlight');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
