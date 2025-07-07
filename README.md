@@ -21,6 +21,8 @@ The system leverages real-time crowd density data to optimize navigation and enh
 - Web UI for destination selection
 - Modular software architecture (ROS2-based)
 
+![figure1](https://github.com/user-attachments/assets/6aa63fc6-d140-4ff4-8565-3108dbd2898b)
+
 ---
 
 ## Getting Started
